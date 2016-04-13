@@ -18,20 +18,7 @@ import net.md_5.bungee.event.EventHandler;
 
 public class EventListeners implements Listener{
 	
-	/*@EventHandler
-	public void onPlayerChat(ChatEvent event) {
-		
-		if ((event.getSender() instanceof ProxiedPlayer)) {
-			// block all commands and chat messages from guests, that are currently registering
-			String playername = event.getSender().toString();
-			PlayerInfo pi = BungeeLogin.instance.getPlayer(playername);
-			if (pi == null)
-				return;
-			if (pi.isRegistering == true)
-				event.setCancelled(true);
-		}
-	}*/
-
+	
 	@EventHandler
 	public void onPlayerChat(ChatEvent event) {
 		if ((event.getSender() instanceof ProxiedPlayer)) {
@@ -129,10 +116,11 @@ public class EventListeners implements Listener{
 	@EventHandler
 	public void onDisconnect(PlayerDisconnectEvent event){
 		ProxiedPlayer sender = event.getPlayer();
-		String playername = sender.getName();
+		String playername = sender.getName().toLowerCase();
 		PlayerInfo pi = BungeeChat.instance.players.get(playername);
 		if (pi == null)
 			return;
+		pi.isRegistering = false;
 		if (pi.isMuted == false)
 			BungeeChat.instance.players.remove(playername);
 	}
@@ -167,7 +155,6 @@ public class EventListeners implements Listener{
         	PlayerInfo pi = BungeeChat.instance.getPlayerInfo(playername);
         	if (pi == null)
         		return;
-        	System.out.println("setting "+ isRegistering);
         	pi.isRegistering = isRegistering;
 
 		} catch (IOException e) {

@@ -43,9 +43,12 @@ public class GlobalChatEvent extends Event implements Cancellable{
 	
 	public void sendMessage(){
 		for (ProxiedPlayer pl : this.players) {
-			if (pl instanceof ProxiedPlayer) {
-				pl.sendMessage(this.message);
-			}
+			if (!(pl instanceof ProxiedPlayer))
+				continue;
+			PlayerInfo pi = BungeeChat.instance.getPlayerInfo(pl.getName());
+			if (pi.isRegistering == true)
+				continue;
+			pl.sendMessage(this.message);
 		}
 	}
 }

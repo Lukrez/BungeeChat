@@ -45,6 +45,10 @@ public class ReplyCommand extends TabCompleteCommand {
 			sender.sendMessage(new TextComponent("Du bist momentan gemuted!"));
 			return;
 		}
+		if (piRec.isRegistering == true) {
+			sender.sendMessage(new TextComponent("Der Empfänger registriert sich gerade!"));
+			return;
+		}
 		if ((chatSpam > -1) && (chatSpam < 5)) { // TODO: Set real Limit
 			sender.sendMessage(new TextComponent("Bitte spamme nicht den Chat voll!"));
 			return;
