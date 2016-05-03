@@ -72,6 +72,8 @@ public class ReplyCommand extends TabCompleteCommand {
 		msgB.setColor(ChatColor.GRAY);
 		sender.sendMessage(msgB);
 		
+		BungeeChat.instance.storeChat("[" + playername + " -> " + recPlayername + "] "+ message);
+		
 		
 	}
 

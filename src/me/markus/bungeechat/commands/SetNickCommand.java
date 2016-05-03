@@ -36,14 +36,18 @@ public class SetNickCommand extends TabCompleteCommand {
 		if (args.length == 0){
 			player.sendMessage(new TextComponent(ChatColor.AQUA + "/setnick [clear]- setzt deinen Nickname zurück"));
 			player.sendMessage(new TextComponent(ChatColor.AQUA + "/setnick <nick> - setzt deinen Nickname"));
-			player.sendMessage(new TextComponent(ChatColor.AQUA + "/setnick <nick/clear> <spielername>- setzt den Nickname eines Spielers"));
+			if (player.hasPermission("bungeechat.setnick.other")) {
+				player.sendMessage(new TextComponent(ChatColor.AQUA + "/setnick <nick/clear> <spielername>- setzt den Nickname eines Spielers"));
+			}
 			return;
 		}
 		if (args.length == 1){
 			if (args[0].toLowerCase().equals("help")){
 				player.sendMessage(new TextComponent(ChatColor.AQUA + "/setnick [clear]- setzt deinen Nickname zurück"));
 				player.sendMessage(new TextComponent(ChatColor.AQUA + "/setnick <nick> - setzt deinen Nickname"));
-				player.sendMessage(new TextComponent(ChatColor.AQUA + "/setnick <nick/clear> <spielername>- setzt den Nickname eines Spielers"));
+				if (player.hasPermission("bungeechat.setnick.other")) {
+					player.sendMessage(new TextComponent(ChatColor.AQUA + "/setnick <nick/clear> <spielername>- setzt den Nickname eines Spielers"));
+				}
 				return;
 			}
 			if (args[0].toLowerCase().equals("clear")){
@@ -59,7 +63,7 @@ public class SetNickCommand extends TabCompleteCommand {
 			PlayerData.save();
 			return;
 		}
-		if (args.length > 1){
+		if (args.length > 1 && player.hasPermission("bungeechat.setnick")) {
 			ProxiedPlayer other = BungeeChat.instance.getProxy().getPlayer(args[1]);
 			if (other == null){
 				player.sendMessage(new TextComponent(ChatColor.DARK_RED + "Der Spieler konnte nicht gefunden werden!"));
@@ -70,13 +74,13 @@ public class SetNickCommand extends TabCompleteCommand {
 			if (args[0].toLowerCase().equals("clear")){
 				PlayerData.nicknames.remove(uuidOther);
 				player.sendMessage(new TextComponent(ChatColor.GREEN + "Der Nickname von "+other.getName()+" wurde entfernt!"));
-				other.sendMessage(new TextComponent(ChatColor.GREEN + "Dein Nickname wurde entfernt!"));
+				other.sendMessage(new TextComponent(ChatColor.GREEN + "Dein Nickname wurde von "+player.getName()+" entfernt!"));
 				PlayerData.save();
 				return;
 			}
 			PlayerData.nicknames.put(uuidOther,args[0]);
 			player.sendMessage(new TextComponent(ChatColor.GREEN + "Der Nickname von "+other.getName()+" wurde gesetzt!"));
-			other.sendMessage(new TextComponent(ChatColor.GREEN + "Dein Nickname wurde neu gesetzt!"));
+			other.sendMessage(new TextComponent(ChatColor.GREEN + "Dein Nickname wurde von "+player.getName()+"neu gesetzt!"));
 			PlayerData.save();
 			return;
 		}

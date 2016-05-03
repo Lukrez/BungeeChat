@@ -59,6 +59,9 @@ public class TellCommand extends TabCompleteCommand {
 		for (int i=2; i < args.length; i++) {
 			message += " " + args[i];
 		}
+		
+		BungeeChat.instance.storeChat("[" + playername + " -> " + recPlayername + "] "+ message);
+		
 		// send message to reciever
 		TextComponent msgA = new TextComponent(playername+" flüstert: "+ message);
 		msgA.setColor(ChatColor.GRAY);

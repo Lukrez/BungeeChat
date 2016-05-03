@@ -23,10 +23,17 @@ public class EventListeners implements Listener{
 	public void onPlayerChat(ChatEvent event) {
 		if ((event.getSender() instanceof ProxiedPlayer)) {
 			// check if message is a command
+			ProxiedPlayer sender = (ProxiedPlayer) event.getSender();
 			if (event.isCommand()){
+				String command = event.getMessage();
+				if (!command.contains("/login ") && !command.contains("/l ")){
+					BungeeChat.instance.storeChat("["+sender.getServer().getInfo().getName() + "] " + sender.getName() + " issued command "+ command);
+				} else {
+					BungeeChat.instance.storeChat("["+sender.getServer().getInfo().getName() + "] " + sender.getName() + " issued login command");
+				}
 				return;
 			}
-			ProxiedPlayer sender = (ProxiedPlayer) event.getSender();
+			
 			String playername = sender.getName();
 			
 			PlayerInfo pi = BungeeChat.instance.getPlayerInfo(playername);
@@ -49,6 +56,7 @@ public class EventListeners implements Listener{
 			
 			// check if player is in local chat
 			if (PlayerData.localChat.contains(sender.getUniqueId().toString())){
+				BungeeChat.instance.storeChat("["+sender.getServer().getInfo().getName() + "][" + sender.getName() + "] "+ event.getMessage());
 				return;
 			}
 			
@@ -107,6 +115,7 @@ public class EventListeners implements Listener{
 			BungeeChat.instance.getProxy().getPluginManager().callEvent(chatevent);
 			if (!chatevent.isCancelled()){
 				chatevent.sendMessage();
+				BungeeChat.instance.storeChat("["+sender.getName()+"] "+ event.getMessage());
 			}
 			return;
 		}

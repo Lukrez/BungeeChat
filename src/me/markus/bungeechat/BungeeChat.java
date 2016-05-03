@@ -17,6 +17,7 @@ public class BungeeChat extends Plugin  {
 	public static BungeeChat instance;
 	public MySQLDataSource database;
 	public HashMap<String, PlayerInfo> players;
+	private ChatLogger chatlog;
 	
     @Override
     public void onEnable() {
@@ -52,6 +53,10 @@ public class BungeeChat extends Plugin  {
 			this.getLogger().severe("Can't use MySQL... Please input correct MySQL informations ! SHUTDOWN...");
 			this.shutdown();
 		}
+    	
+    	// set up chatlogger
+    	this.chatlog = new ChatLogger();
+    	
     	this.players = new HashMap<String, PlayerInfo>();
         getLogger().info("Finished setup!");
     	
@@ -59,6 +64,7 @@ public class BungeeChat extends Plugin  {
     
     @Override
     public void onDisable() {
+    	this.chatlog.close();
     	PlayerData.save();
     	database.close();
     }
@@ -68,6 +74,11 @@ public class BungeeChat extends Plugin  {
 			this.getProxy().stop();
 		}
     }
+    
+    public void storeChat(String message) {
+    	this.chatlog.storeChat(message);
+    }
+    
     
     public boolean checkSpenderPermission(ProxiedPlayer player){
     
